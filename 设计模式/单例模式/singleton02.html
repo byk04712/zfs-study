@@ -1,0 +1,87 @@
+<!--
+ * @Author: 秦真
+ * @Date: 2020-01-11 11:41:45
+ * @LastEditTime: 2020-01-12 12:45:19
+ * @LastEditors: 秦真
+ * @Description: 
+ * @FilePath: /zfs_study/设计模式/单例模式/singleton01.html
+ -->
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <title>单例模式</title>
+   <style>
+     .popup {
+       position: fixed;
+       right: 0;
+       bottom: 0;
+       opacity: 0;
+       height: 0;
+       transition: all 1s;
+       width: 400px;
+       background-color: rgba(0,0,0,.7);
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       color: white;
+     }
+     .popup.show {
+       opacity: 1;
+       height: 100px;
+     }
+   </style>
+ </head>
+ <body>
+   <button onclick="onClick()">Click me</button>
+   <script>
+      /*
+          singleton01.html 做法在没有调用时就已经初始化DOM节点了，
+          很显然，当我们使用时再初始化这样更好
+          改良一下：
+      */
+      let instance;
+     class Popup {
+ 
+       constructor() {
+         if (!instance) {
+          instance = document.createElement('div');
+          instance.classList.add('popup');
+          document.body.appendChild(instance);
+         }
+         return instance;
+       }
+ 
+       show(text, duration = 3000) {
+         instance.classList.add('show');
+         instance.innerText = text;
+         setTimeout(() => {
+           this.hide();
+         }, duration);
+       }
+ 
+       hide() {
+         instance.classList.remove('show');
+         // destory();
+       }
+ 
+       destory() {
+         document.body.removeChild(instance);
+       }
+     }
+ 
+     function onClick() {
+       let popup1 = new Popup();
+      //  popup1.show('小秦，你好');
+ 
+       let popup2 = new Popup();
+      //  popup2.show('小王，你好');
+ 
+       // 两次实例化后产生的对象不是同一个
+       console.log(popup1 === popup2, popup1, popup2); //  false
+     }
+   </script>
+ </body>
+ </html>
